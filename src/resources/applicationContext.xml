@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       http://www.springframework.org/schema/context 
+       http://www.springframework.org/schema/context/spring-context-4.0.xsd
+       http://www.springframework.org/schema/tx 
+       http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd" default-lazy-init="true">
+
+	<!-- 开启注解处理器 -->
+	<context:annotation-config></context:annotation-config>
+	
+	<!-- 扫描包给Spring管理 -->
+	<context:component-scan base-package="com.web.service,com.web.mapper"></context:component-scan>
+
+	<!-- 加载配置文件 -->
+	<context:property-placeholder location="classpath:jdbc.properties"/>
+	
+	<!-- 数据库连接 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver}"></property>
+		<property name="url" value="${jdbc.url}"></property>
+		<property name="username" value="${jdbc.username}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+		
+		<!-- 连接池属性 -->
+		<property name="initialSize" value="${pool.initialSize}"></property>
+		<property name="maxActive" value="${pool.maxActive}"></property>
+		<property name="minIdle" value="${pool.minIdle}"></property>
+		<property name="maxIdle" value="${pool.maxIdle}"></property>
+	</bean>
+	
+	<!-- 定义sessionFactory -->
+	<bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		
+		<!-- 扫描sql配置文件 -->
+		<property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+		
+		<!-- 加载Mybatis配置文件 -->
+		<property name="configLocation" value="classpath:mybatis-config.xml"></property>		
+	</bean>
+	
+	<!-- 自动注入sqlsessionFactory到Mapper -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 注入sqlsessionFactory -->
+		<property name="sqlSessionFactoryBeanName" value="sessionFactory"></property>
+		<!-- 给出要扫描的Mapper接口包 -->
+		<property name="basePackage" value="com.web.mapper"></property>
+	</bean>
+	
+	<!-- 配置事物 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<!-- 定义事物advice -->
+	<tx:advice id="MyAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="insert" propagation="REQUIRED"/>
+			<tx:method name="delete" propagation="REQUIRED"/>
+			<tx:method name="update" propagation="REQUIRED"/>
+			<tx:method name="select" propagation="SUPPORTS" read-only="true"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- 切面配置 -->
+	<aop:config proxy-target-class="true">
+		<aop:pointcut expression="execution(* com.web.service..*(..))" id="MyPointcut"/>
+		<aop:advisor advice-ref="MyAdvice" pointcut-ref="MyPointcut"/>
+	</aop:config>
+	
+	<!-- 定义跳转页面的前后缀 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	
+	<!-- 定义文件上传的配置 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 默认编码 -->
+		<property name="defaultEncoding" value="utf-8"></property>
+		<!-- 文件大小最大值 -->
+		<property name="maxUploadSize" value="10485760000"></property>
+		<!-- 内存中的最大值 -->
+		<property name="maxInMemorySize" value="40960"></property>
+	</bean>
+</beans>       

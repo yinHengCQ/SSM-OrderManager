@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link href="http://localhost:8080/OrderManager/page/css/bootstrap.css" rel="stylesheet"/>
+    <script type="text/javascript" src="http://localhost:8080/OrderManager/page/plugins/angular-1.3.0.14/angular.js"></script>
+    <script type="text/javascript" src="http://localhost:8080/OrderManager/page/js/pagingCommon.js"></script>
+    <script type="text/javascript" src="http://localhost:8080/OrderManager/page/js/angular-ui-bootstrap.js"></script>
+    <script type="text/javascript" src="http://localhost:8080/OrderManager/page/js/jquery.min.js"></script>  
+    <script type="text/javascript">
+    	pagingInit("showItmes","itmesController","http://localhost:8080/OrderManager/showItmes.do","addItmes.html")
+    </script>
+    
+    <link rel="stylesheet" href="http://localhost:8080/OrderManager/page/plugins/kindeditor/themes/default/default.css" />
+    <script src="http://localhost:8080/OrderManager/page/plugins/kindeditor/kindeditor-min.js"></script>
+	<script src="http://localhost:8080/OrderManager/page/plugins/kindeditor/lang/zh_CN.js"></script>
+    <script type="text/javascript" src="http://localhost:8080/OrderManager/page/js/kindEditor-image-one.js"></script>       
+    <title>商品列表</title>
+</head>
+<body>
+	<div ng-app="showItmes" ng-controller="itmesController">
+		<button ng-click="add()" class="btn btn-info">新增商品信息</button>		
+	    <table class="table table-bordered">
+	        <thead>
+	            <tr>
+	                <td>编号</td>
+	                <td>名称</td>
+	                <td>规格</td>
+	                <td>价格</td>
+	                <td>数量</td>
+	                <td>特价</td>
+	                <td>描述</td>
+	                <td>图片</td>
+	                <td>链接地址</td>
+	            </tr>
+	        </thead>
+	        <tbody>
+	            <tr ng-repeat="emp in data">
+	                <td>{{emp.itmesNO}}</td>
+	                <td>{{emp.itmesName}}</td>
+	                <td>{{emp.itmesSpec}}</td>
+	                <td>{{emp.price}}</td>
+	                <td>{{emp.count}}</td>
+	                <td>{{emp.discountPrice}}</td>
+	                <td>{{emp.discribe}}</td>
+	                <td>{{emp.itmesPhoto}}</td>
+	                <td>{{emp.itmesURL}}</td>
+	            </tr>
+	        </tbody>
+	    </table>
+		<nav>
+			<ul class="pagination">
+				<li>
+					<a ng-click="Previous()">
+						<span>上一页</span>
+					</a>
+				</li>
+				<li ng-repeat="p in pageList" ng-class="{active: isActivePage(p)}" >
+					<a ng-click="selectPage(p)" >{{ p }}</a>
+				</li>
+				<li>
+					<a ng-click="Next()">
+						<span>下一页</span>
+					</a>
+				</li>
+			</ul>
+			<span>
+				<select ng-init="selectPageSize=pageSize[3]" ng-model="selectPageSize" ng-options="x for x in pageSize" ng-change="changeSize()">
+				</select>
+			</span>
+		</nav>
+		<button ng-click="toggle()">hiden</button>
+		<p ng-hide="hhh">11111</p>
+	</div>
+</body>
+</html>

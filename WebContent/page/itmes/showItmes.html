@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link href="http://localhost:8080/OrderManager/page/css/bootstrap.css" rel="stylesheet"/>
+    <link href="http://localhost:8080/OrderManager/page/css/myCss.css" rel="stylesheet"/>
+    <script type="text/javascript" src="http://localhost:8080/OrderManager/page/js/jquery.min.js"></script>
+    <script type="text/javascript" src="http://localhost:8080/OrderManager/page/plugins/angular-1.3.0.14/angular.js"></script>
+    <script type="text/javascript" src="http://localhost:8080/OrderManager/page/js/pagingCommon.js"></script>
+    <script type="text/javascript" src="http://localhost:8080/OrderManager/page/js/angular-ui-bootstrap.js"></script>
+    <script type="text/javascript">
+    	$(function(){
+    		console.log($("#itmesForm").serialize());
+    		$("#itmesForm").submit(function(){
+    			console.log($("#itmesForm").serialize());
+    			$.ajax({
+    				url:"http://localhost:8080/OrderManager/addItmes.do",
+    				data:$("#itmesForm").serialize(),
+    				type:"post",
+    				dataType:"text",
+    				success:function(data){
+    					//添加成功，则触发id为cancle按钮的点击事件
+    					console.log(data);
+    					$("#cancle").trigger('click');
+    				}
+    			})
+    			
+    		})
+    	})
+    	pagingInit("showItmes","itmesController","http://localhost:8080/OrderManager/showItmes.do","addItmes.html")
+    </script>
+    
+    <link rel="stylesheet" href="http://localhost:8080/OrderManager/page/plugins/kindeditor/themes/default/default.css" />
+    <script src="http://localhost:8080/OrderManager/page/plugins/kindeditor/kindeditor-min.js"></script>
+	<script src="http://localhost:8080/OrderManager/page/plugins/kindeditor/lang/zh_CN.js"></script>
+    <script type="text/javascript" src="http://localhost:8080/OrderManager/page/js/kindEditor-image-one.js"></script>       
+    <title>商品列表</title>
+</head>
+<body ng-app="showItmes" ng-controller="itmesController">
+	<button ng-click="add()" class="btn btn-info">新增商品信息</button>		
+	<div ng-hide="addItmes">
+		<form class="form-horizontal" id="itmesForm">
+			<div class="form-group">
+				<label class="col-md-3 control-label">商品编号</label>
+				<div class="col-md-5">
+					<input ng-model="itmes.itmesNO" name="itmesNO" type="text" class="form-control" placeholder="请输入商品编号">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-3 control-label">商品名称</label>
+				<div class="col-md-5">
+					<input ng-model="itmes.itmesName" name="itmesName" type="text" class="form-control" placeholder="请输入商品名称">
+				</div>
+			</div>		
+			<div class="form-group">
+				<label class="col-md-3 control-label">商品规格</label>
+				<div class="col-md-5">
+					<input ng-model="itmes.itmesSpec" name="itmesSpec" type="text" class="form-control" placeholder="请输入商品规格">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-3 control-label">商品原价</label>
+				<div class="col-md-5">
+					<input ng-model="itmes.price" name="price" type="text" class="form-control" placeholder="请输入商品原价">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-3 control-label">库存数量</label>
+				<div class="col-md-5">
+					<input ng-model="itmes.count" name="count" type="text" class="form-control" placeholder="请输入库存数量">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-3 control-label">商品打折后价格</label>
+				<div class="col-md-5">
+					<input ng-model="itmes.discountPrice" name="discountPrice" type="text" class="form-control" placeholder="请输入商品打折后价格">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-3 control-label">图片链接地址</label>
+				<div class="col-md-5">
+					<input ng-model="itmes.itmesURL" name="itmesURL" type="text" class="form-control" placeholder="请输入图片链接地址">
+				</div>
+			</div>
+			<div class="form-group">					
+				<label class="col-md-3 control-label">商品图片</label>
+				<input ng-model="itmes.itmesPhoto" name="itmesPhoto" class="form-control" type="hidden" id="url" />
+				<div class="col-md-5">
+					<input class="btn btn-primary" type="button" id="image" value="选择图片" />（网络图片 + 本地上传）
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-3 control-label">商品图片预览</label>		
+				<div class="col-md-5" >
+					<img src="" id="new_image" width="120" height="120">									
+				</div>			
+			</div>						
+			<div class="form-group">
+				<label class="col-md-3 control-label">商品描述</label>
+				<div class="col-md-5">
+					<input ng-model="itmes.discribe" name="discribe" type="text" class="form-control" placeholder="请输入商品描述">
+				</div>
+			</div>
+	
+			<div class="form-group">
+				<div class="col-md-offset-3 col-md-5">
+					<button type="submit" class="btn btn-success">登录</button>
+					<button ng-click="cancle()" id="cancle" type="button" class="btn btn-warning">取消</button>
+				</div>
+			</div>
+		</form>	
+	</div>
+	<div>
+	    <table class="table table-bordered">
+	        <thead>
+	            <tr>
+	                <td>编号</td>
+	                <td>名称</td>
+	                <td>规格</td>
+	                <td>价格</td>
+	                <td>数量</td>
+	                <td>特价</td>
+	                <td>描述</td>
+	                <td>图片</td>
+	                <td>链接地址</td>
+	                <td>操作</td>
+	            </tr>
+	        </thead>
+	        <tbody>
+	            <tr ng-repeat="emp in data">	            	
+	                <td style="line-height:inherit;">{{emp.itmesNO}}</td>
+	                <td>{{emp.itmesName}}</td>
+	                <td>{{emp.itmesSpec}}</td>
+	                <td>{{emp.price}}</td>
+	                <td>{{emp.count}}</td>
+	                <td>{{emp.discountPrice}}</td>
+	                <td>{{emp.discribe}}</td>
+	                <td><img src="{{emp.itmesPhoto|hasImage}}" width="120" height="120"></td>
+	                <td>{{emp.itmesURL}}</td>
+	                <td>
+	                	<button type="button" ng-click="update()" class="btn btn-warning">修改</button>
+	                	<button type="button" ng-click="delete()" class="btn btn-danger">删除</button>
+	                </td>
+	            </tr>
+	        </tbody>
+	    </table>
+		<nav>
+			<ul class="pagination">
+				<li>
+					<a ng-click="Previous()">
+						<span>上一页</span>
+					</a>
+				</li>
+				<li ng-repeat="p in pageList" ng-class="{active: isActivePage(p)}" >
+					<a ng-click="selectPage(p)" >{{ p }}</a>
+				</li>
+				<li>
+					<a ng-click="Next()">
+						<span>下一页</span>
+					</a>
+				</li>
+			</ul>
+			<span>
+				<select ng-init="selectPageSize=pageSize[3]" ng-model="selectPageSize" ng-options="x for x in pageSize" ng-change="changeSize()">
+				</select>
+			</span>
+		</nav>
+	</div>
+</body>
+</html>

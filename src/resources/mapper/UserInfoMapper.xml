@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.mapper.UserInfoMapper">
+	<sql id="where_Clause">
+		<where>
+		   <!--mybatis 循环遍历标签  -->
+			<foreach collection="searchCriteriaList" item="c" separator="or">
+			    <!-- 如果有条件 -->
+				<if test="c.valid">
+				
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+					
+						<foreach collection="c.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach   collection="criterion.value" item="listItem"
+										open="(" separator=","  close=")">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	
+	<insert id="insert" parameterType="com.web.entity.UserInfo" useGeneratedKeys="true" keyProperty="id">
+		insert into userinfo (loginname,loginpwd,nickname,role,registtime)
+		values 
+		(#{loginname},#{loginpwd},#{nickname},#{role},#{registtime})
+	</insert>
+	
+	<delete id="delete" parameterType="int">
+		delete from userinfo where id=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.web.entity.UserInfo">
+		update userinfo
+		<set>
+			<if test="loginpwd!=null">
+				loginpwd = #{loginpwd},
+			</if>
+			<if test="nickname!=null">
+				nickname = #{nickname},
+			</if>
+			<if test="role!=null">
+				role = #{role},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+  <!-- 分页查询 -->
+	<select id="selectPaging" parameterType="com.web.criterion.CriteriaBuilder"  resultType="com.web.entity.UserInfo">
+	    select 
+			userinfo.id,
+			userinfo.loginname,
+			userinfo.loginpwd,
+			userinfo.nickname,
+			userinfo.role,
+			userinfo.registtime 
+		from userinfo 
+	    
+	      <!-- 如果参数不为空 -->
+		  <if test="_parameter != null">
+             <include refid="where_Clause" />
+         </if> 
+    
+        <!-- 如果有排序条件 -->
+        <if test="orderByClause != null">
+		      order by ${orderByClause}
+		</if> 
+		
+		<!-- 如果有分页 -->
+		<if test="limit != null">
+	      <if test="offset != null">
+	        limit ${offset}, ${limit}
+	      </if>
+	      <if test="offset == null">
+	        limit ${limit}
+	      </if>
+	    </if>	
+	</select>
+	
+    <select id="selectPagingCount" parameterType="com.web.criterion.CriteriaBuilder"  resultType="int">
+	    select count(userinfo.id) from userinfo 
+	    
+	      <!-- 如果参数不为空 -->
+		  <if test="_parameter != null">
+             <include refid="where_Clause" />
+         </if>  
+	</select>
+	
+     <!-- 通用查询，适合任意的条件 -->
+	<select id="selectAll" parameterType="com.web.criterion.CriteriaBuilder"  resultType="com.web.entity.UserInfo">
+	    select 
+			id,
+			login_name,
+			login_pwd,
+			nickname,
+			role,
+			regist_time 
+		from userinfo 
+	    
+	      <!-- 如果参数不为空 -->
+		  <if test="_parameter != null">
+             <include refid="where_Clause" />
+         </if> 
+    
+        <!-- 如果有排序条件-->
+        <if test="orderByClause != null">
+		      order by ${orderByClause}
+		</if>  
+	 
+	</select>
+   
+    <select id="selectById" parameterType="int" resultType="com.web.entity.UserInfo">
+	    select 
+			userinfo.id,
+			userinfo.loginname,
+			userinfo.loginpwd,
+			userinfo.nickname,
+			userinfo.role,
+			userinfo.registtime 
+		from userinfo 
+		where id = #{id}
+    </select>  		
+</mapper>
