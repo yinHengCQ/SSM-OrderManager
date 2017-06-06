@@ -36,4 +36,22 @@ public class ItmesController {
 	public String addItmes(Itmes itmes){		
 		return itmesService.insert(itmes)+"";
 	}
+	
+	@RequestMapping(value="/deleteItmes")
+	@ResponseBody
+	public String deleteItmes(Integer id){
+		return itmesService.delete(id)+"";
+	}
+	
+	@RequestMapping(value="/findItmes")
+	@ResponseBody
+	public Itmes findItmesById(Integer id){
+		return itmesService.selectById(id);
+	}
+	
+	@RequestMapping(value="/updateItmes")
+	@ResponseBody
+	public String updateItmes(Itmes itmes){
+		return itmesService.update(itmes)+"";
+	}
 }

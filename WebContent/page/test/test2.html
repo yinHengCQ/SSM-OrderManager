@@ -1,98 +1,146 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!-->
-<html class="no-js">
-<!--<![endif]-->
+<html lang="en" ng-app="myapp" ng-controller="myCtrl">
 <head>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="viewport" content="width=device-width">
-<title>AngularJS 模态对话框</title>
-    <link href="http://localhost:8080/OrderManager/page/css/bootstrap.css" rel="stylesheet"/>
-
+ <meta charset="UTF-8">
+ <title>Title</title>
+ <style>
+ *{margin:0;padding:0; list-style: none;font-size:12px;}
+ .clearfix{overflow: hidden;display:block;clear:both}
+ .clearfix:after{zoom:1}
+ .relation{margin-top:7px;font:14px/38px "微软雅黑"; height: 38px; background: #f8f8f8; padding-left: 26px; color: #666;}
+ .relation li{ margin-top: 5px;float:left;padding-left:50px;cursor:pointer;text-decoration: double}
+ .relation li:hover{color:#f00};
+ .tableMain li{float:left;padding:5px 10px;width:50px}
+ .ullist1 li.num39{width: 39px; height: 36px;line-height: 36px; text-align: center; float: left; border-right: 1px solid #ddd;}
+ .ullist1 li.num73{width: 73px; height: 36px;line-height: 36px; text-align: center; float: left; border-right: 1px solid #ddd;}
+ .ullist1 li.num85{width: 85px; height: 36px; line-height: 36px; text-align: center; float: left; border-right: 1px solid #ddd;}
+ .ullist1 li.num114{width:140px; height: 36px;line-height: 36px; text-align: center; float: left; border-right: 1px solid #ddd;}
+ .ullist1 li.num122{width:170px; height: 36px;line-height: 36px; text-align: center; float: left; border-right: 1px solid #ddd;}
+ .ullist1 li.num167{width:180px; height: 36px;line-height: 36px; text-align: center; float: left; border-right: 1px solid #ddd;}
+ .ullist1 li.num185{width:185px; height: 36px;line-height: 36px; text-align: center; float: left; border-right: 1px solid #ddd;}
+ .ullist1 li.num70{width:70px;height: 36px;line-height: 36px; text-align: center; float: left; border-right: 1px solid #ddd;}
+ .ullist1 li.num103{width:183px; height: 36px;line-height: 36px; text-align: center; float: left; border-right: 1px solid #ddd;}
+ .ullist1 li.num97{width:160px; height: 36px;line-height: 36px; text-align: center; float: left; border-right: 1px solid #ddd;}
+ .ulConter1 li.num39{width: 39px;height: 42px; line-height: 42px; float: left; border-right: 1px solid #ddd;}
+ .ulConter1 li.num73{width: 73px; height: 42px; line-height: 42px; float: left; border-right: 1px solid #ddd;}
+ .ulConter1 li.num85{width: 85px; height: 42px; line-height: 42px; float: left; border-right: 1px solid #ddd;}
+ .ulConter1 li.num114{width:140px; height: 42px; line-height: 42px; float: left; border-right: 1px solid #ddd;}
+ .ulConter1 li.num122{width:170px; height: 42px; line-height: 42px; float: left; border-right: 1px solid #ddd;}
+ .ulConter1 li.num167{width:180px; height: 42px; line-height: 42px; float: left; border-right: 1px solid #ddd;}
+ .ulConter1 li.num185{width:185px; height: 42px; line-height: 42px; float: left; border-right: 1px solid #ddd;}
+ .ulConter1 li.num70{width:70px; height: 42px; line-height: 42px; float: left; border-right: 1px solid #ddd;}
+ .ulConter1 li.num103{width:183px; height: 42px; line-height: 42px; float: left; border-right: 1px solid #ddd;}
+ .ulConter1 li.num97{width:160px; height: 42px; line-height: 42px; float: left; border-right: 1px solid #ddd;}
+ 
+ .ulConter1 li.num39 input{ width:19px; height: 19px; margin:11px; border: 1px solid #ddd; }
+ .ulConter1 li.num73 input{ width:68px; border: 1px solid #ddd; margin: 2px;line-height: 32px; height: 32px;}
+ .ulConter1 li.num85 input{ width:80px; border: 1px solid #ddd; margin: 2px;line-height: 32px; height: 32px;}
+ .ulConter1 li.num114 input{ width:135px; border: 1px solid #ddd; margin: 2px;line-height: 32px; height: 32px;}
+ .ulConter1 li.num122 input{ width:165px; border: 1px solid #ddd; margin: 2px;line-height: 32px; height: 32px;}
+ .ulConter1 li.num167 input{ width:175px; border: 1px solid #ddd; margin: 2px;line-height: 32px; height: 32px;}
+ .ulConter1 li.num185 input{ width:180px; border: 1px solid #ddd; margin: 2px;line-height: 32px; height: 32px;}
+ .ulConter1 li.num70 input{ width:65px; border: 1px solid #ddd; margin: 2px;line-height: 32px; height: 32px;}
+ .ulConter1 li.num103 input{ width:178px; border: 1px solid #ddd; margin: 2px;line-height: 32px; height: 32px;}
+ .ulConter1 li.num97 input{ width:150px; border: 1px solid #ddd; margin: 2px;line-height: 32px; height: 32px;}
+ 
+ </style>
+ <script src="http://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script>
 </head>
-<body ng-app="myApp" class="body">
-      <!-- modal template -->
-      <script type="text/ng-template" id="myModelContent.html">
-         <div class="modal-header">
-             <h3 class="modal-title">模态框</h3>
-         </div>
-         <div class="modal-body">
-             <ul>
-                 <li ng-repeat="item in items">
-                <a ng-click="selected.item = item">{{item}}</a>
-                </li>
-                  <div class="h2">当前选择： <b>{{selected.item}}</b></div>
-             </ul>
-         </div>
-          <div class="modal-footer">
-          <button class="btn btn-primary" ng-click="ok()">
-              确认
-              </button>
-             <button class="btn btn-warning" ng-click="cancel()">退出</button>
-          </div>
-      </script>
-      
-      <div class="container h1">AngularJS 模态对话框</div>
-      <section class="row">
-          <section ng-controller="modalDemo" class="col-md-6"
-              style="margin: 40px auto; float: none; background: #fff; padding: 30px;">
-              <button class="btn btn-default" ng-click="open('lg')">大模态</button>
-              <button class="btn btn-default" ng-click="open()">中模态</button>
-             <button class="btn btn-default" ng-click="open('sm')">小模态</button>
-              <hr>
-              <div class="h1" ng-show="selected">当前选择：{{selected}}</div>
-          </section>
-      </section>
-      <!-- load js -->
-    <script type="text/javascript" src="http://localhost:8080/OrderManager/page/plugins/angular-1.3.0.14/angular.js"></script>
-    <script type="text/javascript" src="http://localhost:8080/OrderManager/page/js/angular-ui-bootstrap.js"></script>
-  </body>
-  
-<script type="text/javascript">
-angular.module('myApp', [ 'ui.bootstrap' ])
- // demo controller
-  .controller('modalDemo', function($scope, $modal, $log) {
-      // list
-      $scope.items = [ 'angularjs', 'backbone', 'canjs', 'Ember', 'react' ];
-     // open click
-      $scope.open = function(size) {
-          var modalInstance = $modal.open({
-              templateUrl : 'myModelContent.html',
-              controller : 'ModalInstanceCtrl', // specify controller for modal
-              size : size,
-             resolve : {
-                  items : function() {
-                      return $scope.items;
-                  }
-              }
-          });
-          // modal return result
-          modalInstance.result.then(function(selectedItem) {
-              $scope.selected = selectedItem;
-          }, function() {
-              $log.info('Modal dismissed at: ' + new Date())
-          });
-      }
-  })
-  // modal controller
-  .controller('ModalInstanceCtrl', function($scope, $modalInstance, items) {
-      
-      $scope.items = items;
-      
-      $scope.selected = {
-          item : $scope.items[0]
-      };
-      // ok click
-      $scope.ok = function() {
-          $modalInstance.close($scope.selected.item);
-      };
-      // cancel click
-      $scope.cancel = function() {
-          $modalInstance.dismiss('cancel');
-      }
+<body>
+<ul class="relation clearfix">
+ <li class="news" ng-click="others.addContact()">新增</li>
+ <li class="dele" ng-click="others.deleContact()">删除</li>
+ <li class="upico" ng-click="others.moveUp()">上移</li>
+ <li class="downico" ng-click="others.moveDown()">下移</li>
+</ul>
+<div class="class="tableMain"">
+ <ol class="clearfix ullist1">
+ <li class="num39"></li>
+ <li class="num73">联系人</li>
+ <li class="num85">商务电话</li>
+ <li class="num114">移动电话</li>
+ <li class="num122">QQ</li>
+ <li class="num122">SKYPE</li>
+ <li class="num167">电子邮件</li>
+ </ol>
+ <ul class="ulConter1 clearfix" ng-repeat="item in items" >
+ <li class="num39">
+  <input type="radio" ng-click="others.selected(item)" name="select">
+ </li>
+ <li class="num73">
+  <input type="text" ng-model="item.otherContact">
+ </li>
+ <li class="num85">
+  <input type="text" ng-model="item.otherBusinessTel" >
+ </li>
+ <li class="num114">
+  <input type="text" ng-model="item.otherMobPhone" >
+ </li>
+ <li class="num122">
+  <input type="text" ng-model="item.otherQQ" >
+ </li>
+ <li class="num122">
+  <input type="text" ng-model="item.otherSKYPE" >
+ </li>
+ <li class="num167">
+  <input type="text" ng-model="item.otherEmail">
+ </li> 
+ </ul>
+</div>
+ 
+<script>
+angular.module('myapp',[]).controller('myCtrl',function($scope){
+ $scope.items=[];
+ $scope.others={
+ selectedItem:{},
+ selected:function(item){
+  this.selectedItem=item;
+ },
+ //增加
+ addContact:function(){
+  $scope.items.push({
+  otherContact:'',
+  otherBusinessTel:'',
+  otherMobPhone:'',
+  otherQQ:'',
+  otherSKYPE:'',
+  otherEmail:'',
+  otherDeliveryAddress:'',
+  otherSex:'',
+  otherDepartment:''
   });
+ },
+ //刪除；
+ deleContact:function(){
+  var index=$scope.items.indexOf(this.selectedItem);
+  $scope.items.splice(index,1);
+ },
+ //上移；
+ moveUp:function(){
+  var index=$scope.items.indexOf(this.selectedItem);
+  var tmp=angular.copy($scope.items[index-1]);
+  if(index==0){
+  alert('已經是第一個了，不能再向上移動了！');
+  return ;
+  }
+  $scope.items[index-1]=$scope.items[index];
+  $scope.items[index]=tmp;
+ 
+ },
+ //下移；
+ moveDown:function(){
+  var index=$scope.items.indexOf(this.selectedItem);
+ 
+  if(index==$scope.items.length-1){
+  alert('已經是最後一個了，不能再向下移動了！');
+  return ;
+  }
+  var tmp=angular.copy($scope.items[index+1]);
+  $scope.items[index+1]=$scope.items[index];
+  $scope.items[index]=tmp;
+ }
+ }
+})
 </script>
+</body>
 </html>
