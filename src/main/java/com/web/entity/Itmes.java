@@ -2,9 +2,14 @@ package com.web.entity;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class Itmes implements Serializable {
 	
 	private Integer id;
+	@Size(max=20,message="{itmes.itmesNO.length.error}")
+	@NotNull(message="{itmes.itmesNO.isNull.error}")
 	private String itmesNO;//商品编号
 	private String itmesName;//商品名称
 	private String itmesSpec;//商品规格

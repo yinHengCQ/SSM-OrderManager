@@ -1,8 +1,13 @@
 package com.web.controller;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -12,6 +17,7 @@ import com.web.entity.Itmes;
 import com.web.service.ItmesService;
 import com.web.util.PageUtil;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Controller
@@ -31,9 +37,14 @@ public class ItmesController {
 		return paging;
 	}
 	
-	@RequestMapping(value="/addItmes")
+	@RequestMapping(value="/addItmes",produces="text/html;charset=UTF-8")
 	@ResponseBody
-	public String addItmes(Itmes itmes){		
+	public String addItmes(@Validated Itmes itmes,BindingResult bindingResult){
+		//获取验证错误信息
+		if (bindingResult.hasErrors()) {
+			System.out.println(new JSONArray().fromObject(bindingResult.getAllErrors()).toString());
+			return new JSONArray().fromObject(bindingResult.getAllErrors()).toString();
+		}
 		return itmesService.insert(itmes)+"";
 	}
 	

@@ -156,9 +156,10 @@ var pagingInit = function(appName,controllerName,urlWithoutPrefix,ObjectName){
 		}
 
 
-		/*增，改页面默认为隐藏*/
+		/*增，改页面，及其返回验证错误信息默认为隐藏*/
 		$scope.addOBJ = true;
 		$scope.updateOBJ = true;
+		$scope.addError = true;
 		/*点击新增数据按钮后，重置所填数据*/
 		$scope.add = function(){
 			$scope.OBJForAdd =angular.copy($scope.block);
@@ -187,16 +188,35 @@ var pagingInit = function(appName,controllerName,urlWithoutPrefix,ObjectName){
 				method:"post",
 				url:urlAdress+"add"+ObjectName+".do?"+jsonToStr(OBJForAdd),
 			}).success(function(data){
-				$scope.cancleAdd();
-				$http.get(urlAdress+"show"+ObjectName+".do?page="+page+"&size="+$scope.selectPageSize).success(function(data){    		
-		    		$scope.data = data.data;
-		    		page = data.page;
-		    		next = data.next;
-		    		prev = data.prev;
-		    		totalPages = data.totalPages;
-		    		getPageList();
-		    		$scope.isActivePage = isActivePage;
-		    	});
+				/*先判断是否有传回验证失败的信息*/
+				if (data[0].defaultMessage) {
+					/*定义一个json格式的errorMessage用于接收错误信息*/
+					var errorMessage = "{";
+					for(var n in data){
+						/*data[n].field是键，data[n].defaultMessage是值*/
+						errorMessage +=(data[n].field+":"+data[n].defaultMessage+",");
+					}
+					var ___last = errorMessage.lastIndexOf(",");            
+					errorMessage = errorMessage.substring(0,___last);
+					errorMessage += "}";
+					
+					/*将errorMessage转化为json并赋值给$scope.addErrorMessage*/
+					$scope.addErrorMessage = eval("(" + errorMessage + ")");
+					/*有错误信息的话，对应的错误将显示出来*/
+					$scope.addError = false;
+				} else {
+					$scope.cancleAdd();
+					$http.get(urlAdress+"show"+ObjectName+".do?page="+page+"&size="+$scope.selectPageSize).success(function(data){    		
+			    		$scope.data = data.data;
+			    		page = data.page;
+			    		next = data.next;
+			    		prev = data.prev;
+			    		totalPages = data.totalPages;
+			    		getPageList();
+			    		$scope.isActivePage = isActivePage;
+			    	});
+				}
+
 			})
 		}		
 		
